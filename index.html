@@ -219,14 +219,7 @@
             }
         }
         
-        function getThreshold(row, col) {
-            let count = 0;
-            if (row > 0) count++;
-            if (row < gridSize - 1) count++;
-            if (col > 0) count++;
-            if (col < gridSize - 1) count++;
-            return count;
-        }
+
         
         async function handleCellClick(row, col) {
             if (isProcessing) return;
@@ -263,7 +256,7 @@
                     
                     for (let {row: r, col: c} of uniqueExplosions) {
                         const cellData = board[r][c];
-                        const threshold = getThreshold(r, c);
+                        const threshold = 4;
                         
                         // Use while loop here instead of if, in case a cell received enough dots to explode multiple times
                         while (cellData.dots >= threshold) {
@@ -299,7 +292,7 @@
                                     }
                                     
                                     neighbor.dots++;
-                                    if (neighbor.dots >= getThreshold(nr, nc)) {
+                                    if (neighbor.dots >= 4) {
                                         nextExplosions.push({row: nr, col: nc});
                                     }
                                 }
