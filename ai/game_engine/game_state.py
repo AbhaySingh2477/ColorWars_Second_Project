@@ -378,6 +378,15 @@ class GameState:
 
         return new_state
 
+    def clone_state(self):
+        """
+        Alias for clone() — used by the MCTS module.
+
+        Returns:
+            A new independent deep copy of this GameState.
+        """
+        return self.clone()
+
     # ─── Board Printing (Console Debug) ──────────────────────────────
 
     def print_board(self):

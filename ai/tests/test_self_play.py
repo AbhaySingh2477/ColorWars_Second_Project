@@ -160,17 +160,18 @@ class TestGameRecord:
         assert examples[1][2] == -1.0  # P2 made this move, P1 won → -1
 
     def test_training_examples_structure(self):
-        """Each training example should be (board, action, outcome)."""
+        """Each training example should be (board, policy, outcome)."""
         record = GameRecord(winner=PLAYER_1)
         board = [[[0, 0], [0, 0]]]
 
         record.add_move(board, (0, 1), PLAYER_1)
 
         examples = record.get_training_examples()
-        board_state, action, outcome = examples[0]
+        board_state, policy, outcome = examples[0]
 
         assert isinstance(board_state, list)
-        assert isinstance(action, tuple)
+        # policy is None for RandomAgent moves (no MCTS data)
+        assert policy is None
         assert isinstance(outcome, float)
 
     def test_serialization_roundtrip(self):
@@ -372,12 +373,12 @@ class TestSelfPlayManager:
         examples = record.get_training_examples()
 
         assert len(examples) == record.total_turns
-        for board, action, outcome in examples:
+        for board, policy, outcome in examples:
             assert isinstance(board, list)
             assert len(board) == 6  # grid_size rows
             assert len(board[0]) == 6  # grid_size cols
-            assert isinstance(action, tuple)
-            assert len(action) == 2
+            # policy is None for RandomAgent games (no MCTS data)
+            assert policy is None
             assert outcome in (1.0, -1.0)
 
     def test_small_grid_games(self):
