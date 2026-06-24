@@ -125,7 +125,12 @@ io.on('connection', (socket) => {
         return callback(result);
       }
 
-      await room.save();
+      if (result.winner) {
+        await Room.deleteOne({ _id: room._id });
+        console.log(`🗑️  Deleted finished room ${code}`);
+      } else {
+        await room.save();
+      }
 
       // Broadcast to both players
       io.to(code).emit('move-made', {
@@ -162,15 +167,15 @@ io.on('connection', (socket) => {
           await Room.deleteOne({ _id: room._id });
           console.log(`🗑️  Deleted waiting room ${room.code}`);
         } else if (room.status === 'playing') {
-          room.status = 'finished';
           const disconnectedPlayer = room.players[playerIndex];
-          room.winner = disconnectedPlayer.playerNumber === 1 ? 2 : 1;
-          await room.save();
-
+          const winner = disconnectedPlayer.playerNumber === 1 ? 2 : 1;
+          
           io.to(room.code).emit('opponent-disconnected', {
-            winner: room.winner,
+            winner: winner,
           });
-          console.log(`💔 Player disconnected from room ${room.code}`);
+          
+          await Room.deleteOne({ _id: room._id });
+          console.log(`🗑️  Deleted room ${room.code} after player disconnect`);
         }
       }
     } catch (err) {
