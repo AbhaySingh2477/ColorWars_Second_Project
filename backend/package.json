@@ -1,0 +1,23 @@
+{
+  "name": "colorwars",
+  "version": "1.0.0",
+  "description": "Color Wars — a dynamic chain-reaction strategy game with local and online multiplayer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npx nodemon server.js"
+  },
+  "keywords": [
+    "game",
+    "chain-reaction",
+    "multiplayer",
+    "socket.io"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "mongoose": "^9.7.2",
+    "socket.io": "^4.8.3"
+  }
+}
