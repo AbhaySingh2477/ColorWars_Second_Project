@@ -99,6 +99,17 @@
             border-radius: 15px;
             width: fit-content;
             border: 1px solid rgba(255,255,255,0.1);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .game-grid.turn-player1 {
+            box-shadow: 0 0 20px rgba(255, 42, 109, 0.4), 0 0 40px rgba(255, 42, 109, 0.2);
+            border-color: rgba(255, 42, 109, 0.6);
+        }
+
+        .game-grid.turn-player2 {
+            box-shadow: 0 0 20px rgba(5, 217, 232, 0.4), 0 0 40px rgba(5, 217, 232, 0.2);
+            border-color: rgba(5, 217, 232, 0.6);
         }
         
         .cell {
@@ -674,7 +685,7 @@
         function updateOnlineStatus() {
             if (gameMode !== 'online') return;
             const isMyTurn = currentPlayer === myPlayerNumber;
-            onlineStatusBar.textContent = isMyTurn ? '🟢 Your Turn' : '🔴 Opponent\'s Turn';
+            onlineStatusBar.textContent = isMyTurn ? 'Your Turn' : 'Opponent\'s Turn';
             onlineStatusBar.className = 'online-status ' + (isMyTurn ? 'your-turn' : 'waiting-turn');
         }
 
@@ -865,6 +876,9 @@
         function updateUI() {
             player1Element.classList.toggle('active-player', currentPlayer === 1);
             player2Element.classList.toggle('active-player', currentPlayer === 2);
+            
+            gameGrid.classList.remove('turn-player1', 'turn-player2');
+            gameGrid.classList.add(currentPlayer === 1 ? 'turn-player1' : 'turn-player2');
             
             
             for (let row = 0; row < gridSize; row++) {
