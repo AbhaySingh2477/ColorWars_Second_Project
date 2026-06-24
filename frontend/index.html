@@ -458,7 +458,7 @@
             }
         }
     </style>
-    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <script src="socket.io.min.js"></script>
 </head>
 <body>
     <div id="main-menu">
@@ -584,9 +584,18 @@
             document.getElementById('join-code-input').value = '';
 
             // Connect socket
-            if (!socket) {
-                socket = io(BACKEND_URL);
-                setupSocketListeners();
+            try {
+                if (!socket) {
+                    if (typeof io !== 'undefined') {
+                        socket = io(BACKEND_URL);
+                        setupSocketListeners();
+                    } else {
+                        document.getElementById('lobby-error').textContent = 'Network error: Multiplayer script failed to load. Please disable ad-blockers or refresh.';
+                    }
+                }
+            } catch (err) {
+                console.error("Socket connection error:", err);
+                document.getElementById('lobby-error').textContent = 'Failed to connect to server.';
             }
         }
 
@@ -601,6 +610,10 @@
 
         function createRoom() {
             document.getElementById('lobby-error').textContent = '';
+            if (!socket) {
+                document.getElementById('lobby-error').textContent = 'Not connected to server. Please try again or refresh the page.';
+                return;
+            }
             socket.emit('create-room', (response) => {
                 if (response.success) {
                     currentRoomCode = response.code;
@@ -621,6 +634,10 @@
                 return;
             }
             document.getElementById('lobby-error').textContent = '';
+            if (!socket) {
+                document.getElementById('lobby-error').textContent = 'Not connected to server. Please try again or refresh the page.';
+                return;
+            }
             socket.emit('join-room', code, (response) => {
                 if (response.success) {
                     currentRoomCode = response.code;
