@@ -10,20 +10,40 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f9;
+            /* Black background with stars */
+            background-color: #000000;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 160px 120px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 180px 180px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 250px 250px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 300px 100px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0));
+            background-size: 350px 350px;
             display: flex;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            color: #e0e0e0;
         }
         
         .game-container {
+            width: 100%;
             max-width: 600px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 30px;
+            background: rgba(10, 15, 25, 0.7);
+            padding: clamp(15px, 5vw, 30px);
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            backdrop-filter: blur(15px);
+            display: none; /* Hidden until game starts */
+            animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
         
         h1 {
@@ -49,53 +69,64 @@
         }
         
         .player1 {
-            background-color: #ffb6b9;
-            color: #333;
+            background-color: transparent;
+            color: #ff2a6d;
+            border: 2px solid #ff2a6d;
+            text-shadow: 0 0 5px #ff2a6d;
+            box-shadow: inset 0 0 10px rgba(255,42,109,0.2);
         }
         
         .player2 {
-            background-color: #b5c7f9;
-            color: #333;
+            background-color: transparent;
+            color: #05d9e8;
+            border: 2px solid #05d9e8;
+            text-shadow: 0 0 5px #05d9e8;
+            box-shadow: inset 0 0 10px rgba(5,217,232,0.2);
         }
         
         .active-player {
-            border: 3px solid #4a4e69;
             transform: scale(1.1);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5);
         }
         
         .game-grid {
             display: grid;
             gap: 12px;
             margin: 30px auto;
-            background-color: rgba(255,255,255,0.4);
+            background-color: rgba(0,0,0,0.4);
             padding: 20px;
             border-radius: 15px;
             width: fit-content;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .cell {
-            width: 65px;
-            height: 65px;
-            background-color: #fff;
-            border-radius: 12px;
+            width: clamp(35px, 12vw, 65px);
+            height: clamp(35px, 12vw, 65px);
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: clamp(8px, 2vw, 12px);
             cursor: pointer;
             position: relative;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 2px 5px rgba(0,0,0,0.1);
-            transition: background-color 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
         
         .cell:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: rgba(255,255,255,0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
         
         .cell.player1 {
-            background-color: #ffb6b9;
+            border-color: #ff2a6d;
+            box-shadow: inset 0 0 15px rgba(255,42,109,0.3);
         }
         
         .cell.player2 {
-            background-color: #b5c7f9;
+            border-color: #05d9e8;
+            box-shadow: inset 0 0 15px rgba(5,217,232,0.3);
         }
         
         .dots-container {
@@ -112,10 +143,20 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: #ffffff;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            background-color: #fff;
+            box-shadow: 0 0 8px #fff;
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .cell.player1 .dot {
+            background-color: #ff2a6d;
+            box-shadow: 0 0 8px #ff2a6d, 0 0 15px #ff2a6d;
+        }
+        
+        .cell.player2 .dot {
+            background-color: #05d9e8;
+            box-shadow: 0 0 8px #05d9e8, 0 0 15px #05d9e8;
         }
         
         @keyframes popIn {
@@ -149,11 +190,119 @@
         .exploding {
             animation: explode 0.3s ease-out;
         }
+        
+        /* Main Menu Styles */
+        #main-menu {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: transparent; /* Uses body's space background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            padding: 20px;
+        }
+        
+        #main-menu.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+        
+        .menu-title {
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 140, 0, 0.8), 2px 2px 4px #000;
+            margin-bottom: 20px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            font-family: serif; /* Gives a more cinematic look */
+            text-align: center;
+            border-top: 2px solid #ffd700;
+            border-bottom: 2px solid #ffd700;
+            padding: 10px 40px;
+            margin-top: 10vh;
+            box-shadow: 0 -10px 20px -10px rgba(255, 215, 0, 0.5), 0 10px 20px -10px rgba(255, 215, 0, 0.5);
+        }
+
+        .menu-buttons-container {
+            position: absolute;
+            bottom: 10%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .menu-btn {
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 12px 30px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-    <div class="game-container">
+    <div id="main-menu">
+        <div class="menu-title">COLOR WARS</div>
         
+        <div class="menu-buttons-container">
+            <button class="menu-btn" onclick="startGame('PvP')">Player vs Player</button>
+            <button class="menu-btn" onclick="startGame('PvC')">Player vs Computer</button>
+        </div>
+    </div>
+
+    <div class="game-container" id="game-container">
+        
+
         <div class="score-board">
             <div id="player1" class="player player1 active-player">
                 <div>Player 1</div>
@@ -165,12 +314,15 @@
         
         
         <div id="game-grid" class="game-grid"></div>
+        <button class="back-btn" onclick="showMenu()">← Main Menu</button>
     </div>
     
     <script>
         const gameGrid = document.getElementById('game-grid');
         const player1Element = document.getElementById('player1');
         const player2Element = document.getElementById('player2');
+        const mainMenu = document.getElementById('main-menu');
+        const gameContainer = document.getElementById('game-container');
         
         let board = [];
         let currentPlayer = 1;
@@ -178,6 +330,27 @@
         let gridSize = 6;
         let turnCount = 0;
         let isProcessing = false;
+        let gameMode = 'PvP';
+        
+        function startGame(mode) {
+            gameMode = mode;
+            mainMenu.classList.add('hidden');
+            gameContainer.style.display = 'block';
+            
+            // Re-label player 2 if playing against computer
+            if (mode === 'PvC') {
+                player2Element.querySelector('div').innerText = "Computer";
+            } else {
+                player2Element.querySelector('div').innerText = "Player 2";
+            }
+            
+            initGame();
+        }
+
+        function showMenu() {
+            mainMenu.classList.remove('hidden');
+            gameContainer.style.display = 'none';
+        }
         
         function initGame() {
             board = [];
@@ -316,6 +489,10 @@
                 currentPlayer = currentPlayer === 1 ? 2 : 1;
                 updateUI();
                 isProcessing = false;
+                
+                if (gameMode === 'PvC' && currentPlayer === 2 && !checkWinCondition()) {
+                    setTimeout(makeComputerMove, 300);
+                }
             }
         }
         
@@ -376,7 +553,162 @@
         }
         
         
-        initGame();
+        // --- AI LOGIC ---
+        function cloneBoard(b) {
+            return b.map(row => row.map(cell => ({owner: cell.owner, dots: cell.dots})));
+        }
+
+        function getLegalMoves(b, player) {
+            let moves = [];
+            for (let r=0; r<gridSize; r++){
+                for (let c=0; c<gridSize; c++){
+                    if (b[r][c].owner === 0 || b[r][c].owner === player) {
+                        moves.push({row: r, col: c});
+                    }
+                }
+            }
+            return moves;
+        }
+
+        function simulateMoveJS(b, r, c, player) {
+            b[r][c].owner = player;
+            b[r][c].dots++;
+            
+            let explosions = [{row: r, col: c}];
+            while (explosions.length > 0) {
+                let nextExplosions = [];
+                const uniqueExplosions = [];
+                const seen = new Set();
+                for (let e of explosions) {
+                    const key = `${e.row},${e.col}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        uniqueExplosions.push(e);
+                    }
+                }
+                
+                for (let {row: cr, col: cc} of uniqueExplosions) {
+                    const cellData = b[cr][cc];
+                    while (cellData.dots >= 4) {
+                        cellData.dots -= 4;
+                        if (cellData.dots === 0) cellData.owner = 0;
+                        
+                        const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+                        for (const [dx, dy] of directions) {
+                            const nr = cr + dx;
+                            const nc = cc + dy;
+                            if (nr >= 0 && nr < gridSize && nc >= 0 && nc < gridSize) {
+                                b[nr][nc].owner = player;
+                                b[nr][nc].dots++;
+                                if (b[nr][nc].dots >= 4) {
+                                    nextExplosions.push({row: nr, col: nc});
+                                }
+                            }
+                        }
+                    }
+                }
+                explosions = nextExplosions;
+            }
+            return b;
+        }
+
+        function evaluateBoard(b) {
+            let p1Dots = 0, p2Dots = 0;
+            for (let r=0; r<gridSize; r++){
+                for (let c=0; c<gridSize; c++){
+                    if (b[r][c].owner === 1) p1Dots += b[r][c].dots;
+                    if (b[r][c].owner === 2) p2Dots += b[r][c].dots;
+                }
+            }
+            
+            if (p1Dots + p2Dots > 1) {
+                if (p1Dots === 0) return 100000;
+                if (p2Dots === 0) return -100000;
+            }
+            
+            let score = 0;
+            score += p2Dots * 10;
+            score -= p1Dots * 10;
+            
+            for (let r=0; r<gridSize; r++){
+                for (let c=0; c<gridSize; c++){
+                    const cell = b[r][c];
+                    if (cell.dots === 3) {
+                        if (cell.owner === 2) score += 15;
+                        if (cell.owner === 1) score -= 15;
+                        
+                        const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+                        for (const [dx, dy] of directions) {
+                            const nr = r + dx;
+                            const nc = c + dy;
+                            if (nr >= 0 && nr < gridSize && nc >= 0 && nc < gridSize) {
+                                const neighbor = b[nr][nc];
+                                if (neighbor.dots === 3 && neighbor.owner !== cell.owner && neighbor.owner !== 0) {
+                                    if (cell.owner === 2) score -= 30; // very vulnerable
+                                    if (cell.owner === 1) score += 30; // enemy is vulnerable
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return score;
+        }
+
+        function minimax(b, depth, alpha, beta, isMaximizing) {
+            const score = evaluateBoard(b);
+            if (depth === 0 || Math.abs(score) >= 90000) return score;
+            
+            if (isMaximizing) {
+                let maxEval = -Infinity;
+                const moves = getLegalMoves(b, 2);
+                for (let move of moves) {
+                    let nextBoard = simulateMoveJS(cloneBoard(b), move.row, move.col, 2);
+                    let ev = minimax(nextBoard, depth - 1, alpha, beta, false);
+                    maxEval = Math.max(maxEval, ev);
+                    alpha = Math.max(alpha, ev);
+                    if (beta <= alpha) break;
+                }
+                return maxEval;
+            } else {
+                let minEval = Infinity;
+                const moves = getLegalMoves(b, 1);
+                for (let move of moves) {
+                    let nextBoard = simulateMoveJS(cloneBoard(b), move.row, move.col, 1);
+                    let ev = minimax(nextBoard, depth - 1, alpha, beta, true);
+                    minEval = Math.min(minEval, ev);
+                    beta = Math.min(beta, ev);
+                    if (beta <= alpha) break;
+                }
+                return minEval;
+            }
+        }
+
+        function makeComputerMove() {
+            if (isProcessing || checkWinCondition() || currentPlayer !== 2) return;
+            
+            const moves = getLegalMoves(board, 2);
+            if (moves.length === 0) return;
+            
+            moves.sort(() => Math.random() - 0.5);
+            
+            let bestScore = -Infinity;
+            let bestMove = moves[0];
+            
+            // Depth 2 search
+            for (let move of moves) {
+                let nextBoard = simulateMoveJS(cloneBoard(board), move.row, move.col, 2);
+                let score = minimax(nextBoard, 1, -Infinity, Infinity, false);
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+            }
+            
+            handleCellClick(bestMove.row, bestMove.col);
+        }
+
+        // We don't automatically initGame anymore, we wait for menu selection.
     </script>
 </body>
 </html>
