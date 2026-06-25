@@ -1,5 +1,8 @@
 # Color Wars
 
+**🎮 Play the Game:** [Color Wars on Vercel](https://color-wars-second-project.vercel.app/)  
+**📓 Development Journal:** [Google Docs Journal](https://docs.google.com/document/d/15EP6-Btnj7IfS2_VEQJh1AudkSxFEW5YTL8rBBAWJ2Y/edit?usp=sharing)
+
 Color Wars is a dynamic, highly-animated web-based strategy puzzle game inspired by the classic game Chain Reaction. It features stunning cinematic visuals, micro-animations, glowing neon aesthetics, and real-time online multiplayer gameplay!
 
 ## Features
